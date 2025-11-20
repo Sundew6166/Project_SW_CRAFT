@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home | Mitsubishi Motors Thailand{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}" />
+{% endblock %}
+
+{% block content %}
+
+<header class="hero-section text-center text-white">
+    
+    <div class="image-bg-overlay">
+        <img src="{% static 'images/xforce.jpg' %}" 
+             class="img-fluid hero-image" 
+             alt="All New XFORCE HEV driving on the road at night">
+    </div>
+
+    <div class="content-overlay d-flex align-items-center justify-content-center">
+        <div class="container text-center hero-text-box">
+            
+            <div class="mb-4 product-badge">
+                <p class="text-uppercase mb-1 fw-bold fs-6 product-label">ALL-NEW</p>
+                <img src="{% static 'images/xforce_logo_white.png' %}" 
+                     alt="XFORCE HEV Logo" 
+                     class="xforce-logo mb-2">
+            </div>
+
+            <h1 class="display-2 fw-extra-bold main-headline">XPERIENCE THE FORCE</h1>
+            
+            <p class="lead subtitle mt-3">A new power. Pure thrill. Every drive.</p>
+            
+            <div class="mt-5">
+                <a href="{% url 'cars'%}" class="cta-link">More Information</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+{% endblock content %}

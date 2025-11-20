@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Company History | Mitsubishi Motors Thailand{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/history.css' %}" />
+{% endblock %}
+
+{% block content %}
+
+<section class="py-5 header-gradient text-white text-center">
+    <div class="container">
+        <h1 class="fw-bold display-4">MITSUBISHI MOTORS THAILAND</h1>
+        <p class="lead mt-3">
+            Over 60 years of innovation, manufacturing excellence, and global expansion.
+        </p>
+    </div>
+</section>
+
+
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="card shadow-lg border-0">
+            <div class="card-body p-4">
+                <p class="lead">
+                    Mitsubishi Motors (Thailand) Co., Ltd., the largest facility in the MMC group and an export hub to 
+                    more than 120 countries, is committed to producing world-class vehicles focusing on quality, safety, 
+                    technology, and customer satisfaction.
+                </p>
+                <p>
+                    In 2018, the Education Academy opened in Pathum Thani, and in 2024, MMTh celebrated its 
+                    <strong>7 millionth vehicle production milestone.</strong>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <h2 class="fw-bold mb-5 text-center">60-year Key Milestones (1961–2021)</h2>
+
+        <div class="timeline">
+
+            {% for year, title, desc in timeline_data %}
+            <div class="timeline-item {% cycle 'left' 'right' %}">
+                <div class="timeline-content card shadow-lg border-0 p-4">
+                    
+                    <div class="timeline-img-container mb-3">
+                        <img 
+                            src="{% static 'images/history/'|add:year|add:'.jpg' %}" 
+                            alt="{{ title }} ({{ year }})" 
+                            class="img-fluid rounded timeline-img"
+                        >
+                    </div>
+                    
+                    <h5 class="fw-bold">{{ title }} <span class="text-muted">({{ year }})</span></h5>
+                    <p>{{ desc }}</p>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</section>
+
+{% endblock content %}

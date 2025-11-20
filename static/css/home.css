@@ -1,0 +1,144 @@
+/* --- 1. VARIABLES & BASE SETUP (Matching Theme) --- */
+:root {
+    --mmth-red: #D00000; 
+    --mmth-black: #0A0A0A;
+    --mmth-white: #FFFFFF;
+}
+
+/* Custom Utilities */
+.fw-extra-bold {
+    font-weight: 900 !important;
+}
+
+
+/* --- 2. HERO SECTION STYLES --- */
+
+.hero-section {
+    position: relative;
+    width: 100%;
+    height: 100vh; /* ทำให้ Hero Section เต็มหน้าจอ */
+    overflow: hidden;
+    background-color: var(--mmth-black); /* Fallback/Loading background */
+}
+
+/* Background Image/Video Container */
+.image-bg-overlay, .video-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* ทำให้รูป/วิดีโอเต็มพื้นที่ */
+    z-index: 1;
+}
+
+/* Dark Overlay เพื่อให้ข้อความอ่านง่ายบนฉากหลังที่สว่าง */
+.image-bg-overlay:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Gradient ดำทึบด้านบนและใสขึ้นด้านล่างเล็กน้อย */
+    background: rgba(0, 0, 0, 0.4); 
+    z-index: 2;
+}
+
+/* Content Box (ข้อความทั้งหมด) */
+.content-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+}
+
+/* Text Styling */
+.hero-text-box {
+    /* จัดตำแหน่งให้อยู่ตรงกลางค่อนไปทางบนเล็กน้อย (ตามภาพตัวอย่าง) */
+    transform: translateY(-5%); 
+    max-width: 800px;
+}
+
+/* Logo / Product Badge */
+.product-badge {
+    line-height: 1;
+}
+.product-label {
+    letter-spacing: 2px;
+    font-size: 0.85rem !important;
+    color: #DDDDDD; /* สีเทาอ่อน */
+}
+.xforce-logo {
+    max-width: 350px;
+    height: auto;
+}
+
+/* Main Headline */
+.main-headline {
+    font-size: 4.5rem; 
+    letter-spacing: 5px;
+    /* เพิ่ม Light Shadow เพื่อให้ดูสว่างบนพื้นหลังที่มืด (ตามภาพ) */
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+/* Subtitle */
+.subtitle {
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: #CCCCCC;
+}
+
+/* --- CTA Link: White Text, White Border --- */
+
+.cta-link {
+    /* พื้นหลังโปร่งใส */
+    background: transparent; 
+    /* ตัวอักษรสีขาว */
+    color: var(--mmth-white) !important; 
+    
+    /* เส้นกรอบสีขาว */
+    border: 2px solid var(--mmth-white); 
+    
+    /* จัดรูปแบบให้เหมือนปุ่ม */
+    padding: 0.75rem 2.5rem;
+    border-radius: 2px;
+    letter-spacing: 2px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-decoration: none; /* ลบขีดเส้นใต้ */
+    display: inline-block; /* ทำให้กำหนด Padding ได้ */
+    
+    transition: all 0.3s ease;
+}
+
+.cta-link:hover {
+    /* Hover State: ตัวอย่าง Hover แดง-ดำ ที่โดดเด่น */
+    background-color: var(--mmth-white); 
+    border-color: var(--mmth-white);
+    color: var(--mmth-black) !important; 
+    transform: scale(1.05);
+}
+
+
+/* --- RESPONSIVENESS --- */
+@media (max-width: 992px) {
+    .main-headline {
+        font-size: 3rem;
+        letter-spacing: 3px;
+    }
+    .xforce-logo {
+        max-width: 250px;
+    }
+}
+@media (max-width: 576px) {
+    .main-headline {
+        font-size: 2rem;
+    }
+    .hero-text-box {
+        padding: 0 1rem;
+    }
+}

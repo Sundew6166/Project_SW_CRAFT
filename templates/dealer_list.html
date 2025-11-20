@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dealer Locations | Mitsubishi Motors Thailand{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dealer.css' %}" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+{% endblock %}
+
+{% block content %}
+
+<section class="py-5 text-white text-center header-gradient">
+    <div class="container">
+        <h1 class="fw-bold display-4">OUR DEALER NETWORK</h1>
+        <p class="lead mt-3">
+            Find the nearest Mitsubishi Motors dealer and their contact details below.
+        </p>
+    </div>
+</section>
+
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <h2 class="fw-bold text-mmth-red mb-0">Find a branch near you</h2>
+            
+            {% if user.is_authenticated and user.is_superuser or user.is_staff %}
+                <a href="{% url 'dealer_create' %}" class="btn btn-success shadow-sm fw-bold">
+                    <i class="bi bi-plus-circle-fill me-1"></i> Add New Dealer
+                </a>
+            {% endif %}
+            
+        </div>
+        
+        <div class="row justify-content-center mb-4">
+            <div class="col-md-6">
+                <input type="text" class="form-control" id="dealerSearch" placeholder="Search by Dealer Name or Location...">
+            </div>
+        </div>
+
+        <div class="row g-4 dealer-list">
+            
+            {% if dealer_list %}
+                {% for dealer in dealer_list %}
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card shadow-sm h-100 rounded-3 dealer-card">
+                            <div class="card-body p-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="bi bi-geo-alt-fill text-mmth-red fs-4 me-3"></i>
+                                    <h5 class="card-title fw-bold mb-0 text-uppercase">{{ dealer.name }}</h5>
+                                </div>
+                                <hr>
+                                
+                                <p class="card-text mb-3">
+                                    <i class="bi bi-house-fill me-2"></i> {{ dealer.address }}
+                                </p>
+
+                                {% if user.is_authenticated and user.is_superuser or user.is_staff %}
+                                    <div class="mt-3 pt-3 border-top d-flex justify-content-end">
+                                        <a href="{% url 'dealer_update' pk=dealer.pk %}" class="btn btn-sm btn-outline-primary me-2" title="Edit Dealer">
+                                            <i class="bi bi-pencil-square"></i> Edit
+                                        </a>
+                                        <a href="{% url 'dealer_delete' pk=dealer.pk %}" class="btn btn-sm btn-outline-danger" title="Delete Dealer">
+                                            <i class="bi bi-trash"></i> Delete
+                                        </a>
+                                    </div>
+                                {% endif %}
+
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-12 text-center">
+                    <div class="alert alert-warning" role="alert">
+                        No dealers found at this time.
+                    </div>
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+</section>
+
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+    // ส่วน JavaScript เดิมสำหรับ Search (ใช้กับการ์ดได้)
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('dealerSearch');
+        const dealerList = document.querySelector('.dealer-list');
+        const dealerCards = dealerList ? dealerList.querySelectorAll('.col-lg-4') : [];
+
+        if (!searchInput || dealerCards.length === 0) {
+            return;
+        }
+
+        searchInput.addEventListener('keyup', function() {
+            const filter = searchInput.value.toUpperCase();
+            
+            dealerCards.forEach(cardContainer => {
+                // ดึงข้อความจากการ์ดทั้งหมด (ชื่อและที่อยู่)
+                const cardText = cardContainer.textContent || cardContainer.innerText;
+                
+                if (cardText.toUpperCase().indexOf(filter) > -1) {
+                    cardContainer.style.display = ""; // แสดงการ์ด
+                } else {
+                    cardContainer.style.display = "none"; // ซ่อนการ์ด
+                }
+            });
+        });
+    });
+</script>
+{% endblock extra_js %}

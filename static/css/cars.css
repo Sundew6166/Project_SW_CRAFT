@@ -1,0 +1,148 @@
+/* --- 1. VARIABLES & BASE SETUP --- */
+:root {
+    --mmth-red: #D00000; 
+    --mmth-black: #0A0A0A;
+    --mmth-white: #FFFFFF;
+    --mmth-text-dark: #222222; 
+}
+
+/* Custom Text Utilities */
+.text-mmth-black {
+    color: var(--mmth-black) !important;
+}
+
+.text-mmth-dark {
+    color: var(--mmth-text-dark) !important;
+}
+
+/* --- 2. HEADER & INTRO STYLES --- */
+.intro-text {
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto !important;
+    line-height: 1.6;
+}
+
+/* --- 3. PRODUCT CARD STYLES --- */
+
+.product-card {
+    /* ใช้ padding เพื่อเพิ่มพื้นที่ว่างรอบภาพ */
+    padding: 1rem 0;
+}
+
+.img-container {
+    overflow: hidden;
+    border-radius: 8px; /* ขอบโค้งมนเล็กน้อย */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.car-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    /* เอฟเฟกต์ Hover: ทำให้ภาพดูมีชีวิตชีวา */
+    transition: transform 0.4s ease;
+}
+
+.img-container:hover .car-img {
+    transform: scale(1.03); /* ซูมเข้าเล็กน้อย */
+}
+
+/* Product Details */
+.product-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    letter-spacing: 0.5px;
+}
+
+.product-price {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.product-desc {
+    font-size: 0.70rem;
+    line-height: 1.5;
+    min-height: 3rem; /* กันความสูงต่างกัน */
+}
+
+/* --- RESPONSIVENESS --- */
+@media (max-width: 991px) {
+    .product-title {
+        font-size: 1.5rem;
+    }
+    .product-card {
+        padding: 1rem 0;
+    }
+}
+
+/* --- EXPLORE Button Style (Dark Outline) --- */
+
+.explore-btn-dark {
+    /* พื้นหลังโปร่งใส */
+    background: transparent; 
+    /* ตัวอักษรสีดำ */
+    color: var(--mmth-black) !important; 
+    
+    /* เส้นกรอบสีดำ */
+    border: 1px solid var(--mmth-black); 
+    
+    /* จัดรูปแบบให้เหมือนปุ่ม */
+    padding: 0.5rem 1.5rem;
+    border-radius: 4px;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-decoration: none; /* ลบขีดเส้นใต้ */
+    display: inline-block; 
+    
+    transition: all 0.2s ease;
+}
+
+.explore-btn-dark:hover {
+    /* Hover State: เปลี่ยนพื้นหลังเป็นสีแดงขององค์กร */
+    background-color: var(--mmth-black); 
+    /* ตัวอักษรสีขาว */
+    color: var(--mmth-white) !important; 
+    /* กรอบเปลี่ยนเป็นสีแดง */
+    border-color: var(--mmth-black); 
+    
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+}
+
+/* --- Product Specifications Tags (Existing CSS) --- */
+
+.product-specs {
+    display: flex; 
+    gap: 10px;    
+    margin-top: 5px;
+    margin-bottom: 10px; 
+}
+
+.spec-tag {
+    display: inline-block;
+    padding: 3px 10px;
+    font-size: 0.75rem; 
+    font-weight: 600;
+    text-transform: uppercase;
+    border-radius: 4px;
+    border: 1px solid #E0E0E0; 
+    
+    /* Center align items if the tag height changes (e.g. icon slightly taller) */
+    display: flex;
+    align-items: center; 
+}
+
+/* ปรับสีให้เข้ากับ Custom Variables */
+.product-specs .bg-dark {
+    background-color: var(--mmth-black) !important;
+}
+
+.product-specs .text-mmth-black {
+    color: var(--mmth-black) !important;
+}
+

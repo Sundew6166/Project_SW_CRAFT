@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Test Drive Requests List{% endblock %}
+
+{% block content %}
+
+{# เปลี่ยนจาก class="container py-5" เป็น container-fluid เพื่อใช้ความกว้างหน้าจอทั้งหมด #}
+<div class="container-fluid py-5 px-5"> 
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="fw-bolder">
+            <i class="bi bi-car-front-fill me-2 text-primary"></i> TEST DRIVE REQUESTS
+        </h1>
+        {# คง W-50 เพื่อให้ช่องค้นหาไม่กว้างเกินไป #}
+        <div class="input-group w-50"> 
+            <span class="input-group-text bg-light border-end-0"><i class="bi bi-search"></i></span>
+            <input type="text" id="searchInput" class="form-control border-start-0" placeholder="Search by name, email, or model...">
+        </div>
+    </div>
+    
+    <div class="card shadow-lg border-0">
+        <div class="card-body p-4">
+
+            {% if requests %}
+                <p class="text-muted mb-3">
+                    Showing <strong class="text-dark"><span id="totalRequests">{{ requests|length }}</span></strong> total request(s).
+                </p>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover align-middle" id="requestTable">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width: 5%;">ID</th>
+                                <th style="width: 15%;"><i class="bi bi-car-front"></i> Model</th>
+                                <th style="width: 15%;"><i class="bi bi-person"></i> Customer Name</th>
+                                <th style="width: 15%;">Contact Info</th>
+                                <th style="width: 10%;"><i class="bi bi-calendar-check"></i> Preferred Date</th>
+                                <th style="width: 10%;"><i class="bi bi-geo-alt"></i> Dealer</th>
+                                <th style="width: 10%;">Requested At</th>
+                                <th style="width: 15%;">Confirmation Staff / Notes</th>
+                                <th style="width: 5%;"><i class="bi bi-clipboard-check"></i> Status</th>
+                                <th style="width: 5%;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for request in requests %}
+                            <tr>
+                                <td class="text-muted">{{ request.id }}</td>
+                                <td><strong>{{ request.get_car_model_display }}</strong></td>
+                                <td>{{ request.full_name }}</td>
+                                <td>
+                                    <small class="d-block text-truncate" style="max-width: 100%;">
+                                        <i class="bi bi-envelope me-1"></i> {{ request.email }}
+                                    </small>
+                                    <small class="d-block">
+                                        <i class="bi bi-phone me-1"></i> {{ request.phone_number }}
+                                    </small>
+                                </td>
+                                <td>
+                                    <strong>{{ request.preferred_date|date:"D, M d, Y" }}</strong>
+                                </td>
+                                <td>{{ request.preferred_dealer }}
+                                    <small class="text-muted d-block">
+                                        ({{ request.preferred_dealer.dealer_code }})
+                                    </small>
+                                </td>
+                                <td>{{ request.requested_at|date:"M d, H:i" }}</td>
+                                <td>
+                                    <strong class="d-block">{{ request.confirmation_staff.username|default:"N/A" }}</strong>
+                                    <small class="text-muted d-block">
+                                        {{ request.confirmation_datetime|date:"M d, H:i"|default:"(Not Confirmed)" }}
+                                    </small>
+                                    <small class="text-secondary fst-italic d-block mt-1">
+                                        {{ request.staff_notes|default:"-"|truncatechars:30 }}
+                                    </small>
+                                </td>
+                                <td>
+                                    <span class="badge rounded-pill py-2 px-3 
+                                        {% if request.status == 'PENDING' %}bg-warning text-dark{% elif request.status == 'CONFIRMED' %}bg-success{% elif request.status == 'CANCELLED' %}bg-danger{% else %}bg-secondary{% endif %}">
+                                        {{ request.status }}
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <a href="{% url 'testdrive_update' pk=request.pk %}" class="btn btn-sm btn-outline-primary shadow-sm" title="Edit Request">
+                                        <i class="bi bi-pencil-square"></i> Edit
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                {# Pagination Placeholder #}
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center mt-4">
+                        <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                    </ul>
+                </nav>
+
+            {% else %}
+                <div class="alert alert-info border-0 text-center py-4 my-5" role="alert">
+                    <h4 class="alert-heading"><i class="bi bi-info-circle me-2"></i> No Requests Found</h4>
+                    <p class="mb-0">There are no test drive requests in the system yet. They will appear here once submitted.</p>
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{# ส่วนของ JavaScript สำหรับฟังก์ชันการค้นหา (Frontend) #}
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
+        const tableBody = document.querySelector('#requestTable tbody');
+        const rows = tableBody ? tableBody.querySelectorAll('tr') : [];
+        const totalRequestsSpan = document.getElementById('totalRequests');
+
+        if (!searchInput || rows.length === 0) {
+            // หยุดการทำงานถ้าไม่มีช่องค้นหาหรือไม่มีข้อมูลในตาราง
+            return;
+        }
+
+        searchInput.addEventListener('keyup', function() {
+            const filter = searchInput.value.toUpperCase();
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+                // ดึงค่าทั้งหมดจากแถว (Row Text Content)
+                const rowText = row.textContent || row.innerText;
+                
+                if (rowText.toUpperCase().indexOf(filter) > -1) {
+                    row.style.display = ""; // แสดงแถว
+                    visibleCount++;
+                } else {
+                    row.style.display = "none"; // ซ่อนแถว
+                }
+            });
+
+            // อัปเดตจำนวนรายการที่แสดง
+            totalRequestsSpan.textContent = visibleCount;
+        });
+    });
+</script>
+{% endblock extra_js %}

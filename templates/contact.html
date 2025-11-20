@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Contact Us | Mitsubishi Motors Thailand{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/contact.css' %}" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+{% endblock %}
+
+{% block content %}
+
+<section class="py-5 text-white text-center header-gradient">
+    <div class="container">
+        <h1 class="fw-bold display-4">CONTACT US</h1>
+        <p class="lead mt-3">
+            Mitsubishi Motors Thailand is always ready to assist you.
+            Reach out via telephone, fax, or call center.
+        </p>
+    </div>
+</section>
+
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="card shadow-lg border-0 rounded-4 mb-5">
+            <div class="card-body">
+                <h4 class="fw-bold mb-3"><i class="bi bi-building"></i> Mitsubishi Motors Thailand (Head Office)</h4>
+                <p class="fs-5">
+                    FYI Center Tower 1, 9th Floor,<br>
+                    2525 Rama IV Rd., Klong Toei, Klong Toei, 10110, Bangkok
+                </p>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-5 contact-numbers">
+            <div class="col-md-4">
+                <div class="card h-100 contact-card text-center">
+                    <div class="card-body p-4">
+                        <i class="bi bi-telephone-fill contact-icon"></i>
+                        <h5 class="card-title fw-bold mt-2">Telephone</h5>
+                        <p class="card-text display-5 fw-extra-bold text-mmth-red">0-2079-9000</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 contact-card text-center">
+                    <div class="card-body p-4">
+                        <i class="bi bi-printer-fill contact-icon"></i>
+                        <h5 class="card-title fw-bold mt-2">Fax</h5>
+                        <p class="card-text display-5 fw-extra-bold text-mmth-red">0-2079-9090</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 highlight-card text-center">
+                    <div class="card-body p-4">
+                        <i class="bi bi-headset contact-icon"></i>
+                        <h5 class="card-title fw-bold mt-2">Call Center</h5>
+                        <p class="card-text display-5 fw-extra-bold text-mmth-red">02-079-9500</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mb-5">
+            <h3 class="fw-bold mb-4 text-uppercase">Connect with us</h3>
+            <div class="social-links">
+                <a href="https://www.facebook.com/MitsubishiMotorsTH/" target="_blank" class="social-icon-link">
+                    <i class="bi bi-facebook"></i>
+                </a>
+                <a href="https://www.instagram.com/mitsubishimotorsth/?hl=en" target="_blank" class="social-icon-link">
+                    <i class="bi bi-instagram"></i>
+                </a>
+                
+                <a href="https://www.youtube.com/user/MitsubishiMotorsTh" target="_blank" class="social-icon-link">
+                    <i class="bi bi-youtube"></i>
+                </a>
+
+                <a href="https://page.line.me/mitsubishimotorsth?openQrModal=true" target="_blank" class="social-icon-link">
+                    <i class="bi bi-chat-dots-fill"></i>
+                </a>
+            </div>
+        </div>
+        
+        <div class="map-responsive shadow-lg rounded-4 overflow-hidden">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.301288967824!2d100.5600970152369!3d13.730642900000002!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30e29edc0f04bb35%3A0x8a8b2a0f0dc3de11!2sFYI%20Center%2C%20Rama%20IV%20Rd%2C%20Klong%20Toei%2C%20Bangkok!5e0!3m2!1sen!2sth!4v1699362822106!5m2!1sen!2sth" 
+                width="100%" 
+                height="450" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy">
+            </iframe>
+        </div>
+
+    </div>
+</section>
+
+{% endblock content %}

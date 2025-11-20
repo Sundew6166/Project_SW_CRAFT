@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Edit Request #{{ object.pk }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="fw-bold mb-4">Edit Request #{{ object.pk }}</h1>
+    <p>Customer: <strong>{{ object.full_name }}</strong> | Car: <strong>{{ object.get_car_model_display }}</strong></p>
+    <hr>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        {% for field in form %}
+            <div class="mb-3">
+                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}
+                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                {% endif %}
+                {% for error in field.errors %}
+                    <div class="alert alert-danger mt-1">{{ error }}</div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+        <div class="d-flex justify-content-between mt-4">
+            <a href="{% url 'testdrive_list' %}" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-success">Save Changes</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

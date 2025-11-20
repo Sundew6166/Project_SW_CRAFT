@@ -1,0 +1,38 @@
+.navbar-black {
+    background-color: #000 !important;
+}
+
+.navbar-black .navbar-brand,
+.navbar-black .nav-link {
+    color: #fff !important;
+}
+
+.navbar-black .nav-link:hover {
+    color: #ccc !important;
+}
+/* --- 1. SET NAVBAR TOGGLER ICON TO WHITE --- */
+
+.navbar-toggler-icon {
+    /* ใช้ SVG data URI เพื่อกำหนดไอคอนแฮมเบอร์เกอร์สีขาว */
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='white' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+}
+
+/* --- 2. ADJUST BUTTON BORDER AND FOCUS FOR MINIMALIST LOOK --- */
+
+.navbar-toggler {
+    /* ทำให้ขอบปุ่มดูมินิมอล: อาจใช้สีขาวบางๆ หรือสีดำเข้ม */
+    border-color: rgba(255, 255, 255, 0.2) !important; /* ขอบสีขาวบางๆ */
+    transition: all 0.3s ease;
+}
+
+.navbar-toggler:hover {
+    border-color: rgba(255, 255, 255, 0.5) !important; /* ขอบขาวขึ้นเมื่อ Hover */
+}
+
+.navbar-toggler:focus {
+    /* ลบ Shadow ที่น่ารำคาญของ Bootstrap ออก */
+    box-shadow: none !important;
+    /* หรือใช้ Shadow สีแดงอ่อนๆ เพื่อเน้น */
+    /* box-shadow: 0 0 0 0.25rem rgba(208, 0, 0, 0.3) !important; */ 
+    border-color: var(--mmth-red) !important; /* เปลี่ยนขอบเป็นสีแดงเมื่อ Focus */
+}

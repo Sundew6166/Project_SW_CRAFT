@@ -1,0 +1,211 @@
+/* --- 1. VARIABLES & BASE SETUP --- */
+
+:root {
+    /* Mitsubishi Colors */
+    --mmth-red: #D00000; /* Deep Red Accent */
+    --mmth-black: #0A0A0A; /* Dark Background/Text */
+    
+    /* Minimalist Colors */
+    --mmth-white: #FFFFFF;
+    --mmth-light-gray: #F8F8F8; /* Subtle background for sections */
+    --mmth-text-dark: #222222; 
+}
+
+body {
+    font-family: 'Inter', 'Prompt', sans-serif;
+    background-color: var(--mmth-white);
+    color: var(--mmth-text-dark);
+}
+
+/* --- 2. HEADER SECTION --- */
+
+.header-gradient {
+    /* Use a dark, premium gradient for the header */
+    background: #000 !important;
+    color: white; /* Ensure text is white for contrast */
+    padding-top: 6rem !important; /* Adjust padding for better visual weight */
+    padding-bottom: 6rem !important;
+}
+
+.header-gradient h1 {
+    font-size: 3.5rem; /* Large, bold title */
+    letter-spacing: 2px;
+}
+
+.header-gradient p.lead {
+    color: #CCCCCC; /* Subtitle in lighter gray */
+}
+
+/* --- 3. INTRODUCTION SECTION --- */
+
+section.bg-light {
+    background-color: var(--mmth-light-gray) !important; /* Subtle gray background */
+}
+
+.container > .card {
+    /* Clean, soft shadow for a minimalist 'floating' card */
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05); 
+    border-top: 3px solid var(--mmth-red) !important; /* Red accent line on top */
+}
+
+.container > .card p {
+    line-height: 1.8;
+}
+
+/* --- 4. TIMELINE SECTION STYLES --- */
+
+section.py-5 h2 {
+    color: var(--mmth-black);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 700 !important;
+}
+
+.timeline {
+    position: relative;
+    padding: 0;
+    margin-top: 3rem;
+}
+
+/* The vertical red line (The core timeline) */
+.timeline::after {
+    content: '';
+    position: absolute;
+    width: 2px; /* Thin line for minimalism */
+    background-color: var(--mmth-red);
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    margin-left: -1px;
+}
+
+/* Timeline Item (Card container) */
+.timeline-item {
+    padding: 10px 0;
+    position: relative;
+    width: 50%;
+    /* Use padding to create space around the timeline line */
+}
+
+/* Items on the Right */
+.timeline-item.right {
+    left: 50%;
+    padding-left: 50px; /* Space from the red line */
+}
+
+/* Items on the Left */
+.timeline-item.left {
+    padding-right: 50px; /* Space from the red line */
+}
+
+/* Timeline Content Card */
+.timeline-content {
+    background-color: var(--mmth-white);
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    border: 1px solid #EEEEEE;
+}
+
+.timeline-content:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    transform: translateY(-3px);
+}
+
+.timeline-content h5 {
+    color: var(--mmth-black);
+    border-bottom: 2px solid #EAEAEA; /* Light separator */
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.timeline-content h5 span {
+    color: var(--mmth-red) !important; /* Highlight the year in red */
+    font-weight: 700;
+}
+
+/* The Red Dot (The Timeline Marker) */
+.timeline-item::after {
+    content: '';
+    position: absolute;
+    width: 14px; /* Size of the red dot */
+    height: 14px;
+    background-color: var(--mmth-red);
+    border-radius: 50%;
+    z-index: 1; /* Above the red line */
+    top: 25px;
+    box-shadow: 0 0 0 3px var(--mmth-white); /* White ring around the dot */
+}
+
+/* Positioning the Red Dots */
+.timeline-item.left::after {
+    right: -7px; /* Center dot on the left side of the red line */
+}
+
+.timeline-item.right::after {
+    left: -7px; /* Center dot on the right side of the red line */
+}
+
+/* The Arrow/Connector (Triangle pointer) */
+.timeline-item.left .timeline-content::after {
+    content: " ";
+    height: 0;
+    position: absolute;
+    top: 22px;
+    width: 0;
+    z-index: 1;
+    right: -10px; /* Position the arrow */
+    border: medium solid var(--mmth-white);
+    border-width: 10px 0 10px 10px;
+    border-color: transparent transparent transparent var(--mmth-white);
+}
+
+.timeline-item.right .timeline-content::after {
+    content: " ";
+    height: 0;
+    position: absolute;
+    top: 22px;
+    width: 0;
+    z-index: 1;
+    left: -10px; /* Position the arrow */
+    border: medium solid var(--mmth-white);
+    border-width: 10px 10px 10px 0;
+    border-color: transparent var(--mmth-white) transparent transparent;
+}
+
+
+/* --- 5. RESPONSIVENESS (For Mobile/Small Screens) --- */
+
+@media screen and (max-width: 768px) {
+    /* Collapse the timeline into a single column on mobile */
+    .timeline::after {
+        left: 20px; /* Move the red line to the left edge */
+    }
+
+    .timeline-item {
+        width: 100%;
+        padding-left: 50px; /* Give space for the red line */
+        padding-right: 15px;
+        left: 0% !important; /* Ensure all items stack on the left */
+    }
+
+    /* Reposition the dot and arrow for single column */
+    .timeline-item::after {
+        left: 13px !important; /* Center dot over the red line */
+        right: auto;
+        top: 25px;
+    }
+
+    .timeline-item.left .timeline-content::after,
+    .timeline-item.right .timeline-content::after {
+        /* Arrow points left towards the timeline line */
+        left: -10px; 
+        right: auto;
+        border-width: 10px 10px 10px 0;
+        border-color: transparent var(--mmth-white) transparent transparent;
+    }
+
+    .header-gradient h1 {
+        font-size: 2.5rem;
+    }
+}
