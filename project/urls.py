@@ -5,7 +5,7 @@ from django.urls import path
 from .views import (HomePageView, HistoryPageView
                     , ContactPageView, CarsPageView, TestDriveCreateView
                     , DealerListView, DealerCreateView, DealerUpdateView
-                    , DealerDeleteView)
+                    , DealerDeleteView, DealerUserCreateView, UserDeleteView, UserListView)
 
 urlpatterns = [
     path('', HomePageView.as_view(), name='home'),
@@ -22,4 +22,7 @@ urlpatterns = [
     path('dealers/edit/<int:pk>/', DealerUpdateView.as_view(), name='dealer_update'),
     path('dealers/delete/<int:pk>/', DealerDeleteView.as_view(), name='dealer_delete'),
     path('test-drive/success/', views.test_drive_success_view, name='test_drive_success'),
+    path('users/add/dealer/', DealerUserCreateView.as_view(), name='dealer_user_create'),
+    path('users/list/', UserListView.as_view(), name='user_list'),
+    path('users/delete/<int:pk>/', UserDeleteView.as_view(), name='user_delete'),
     ]

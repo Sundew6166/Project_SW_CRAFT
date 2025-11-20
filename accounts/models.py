@@ -3,7 +3,13 @@ from django.db import models
 from project.models import Dealer
 
 class CustomUser(AbstractUser):
-    
+    email = models.EmailField(
+        unique=True,
+        blank=False,
+        null=False,
+        verbose_name='Email Address'
+    )
+
     ROLE_CHOICES = (
         ('admin', 'Admin'),
         ('dealer', 'Dealer'),
@@ -12,7 +18,7 @@ class CustomUser(AbstractUser):
         max_length=10,
         choices=ROLE_CHOICES,
         default='dealer',
-        verbose_name='Dealer'
+        verbose_name='Role'
     )
 
     dealer = models.ForeignKey(
@@ -21,7 +27,7 @@ class CustomUser(AbstractUser):
         null=True, 
         blank=True, 
         related_name='users',
-        verbose_name='ตัวแทนจำหน่าย'
+        verbose_name='Dealer Code'
     )
 
     def __str__(self):

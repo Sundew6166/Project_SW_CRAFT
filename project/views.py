@@ -8,6 +8,8 @@ from .forms import TestDriveForm, TestDriveUpdateForm, DealerForm, DealerUpdateF
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from accounts.forms import CustomUserCreationForm
+from accounts.models import CustomUser
 
 class HomePageView(TemplateView):
     template_name = 'home.html'
@@ -88,17 +90,27 @@ class TestDriveListView(LoginRequiredMixin, ListView):
         user = self.request.user
         
         if user.is_authenticated:
-            if user.is_superuser or (hasattr(user, 'is_admin') and user.is_admin()):
+            # 1. Admin/Superuser เห็นทั้งหมด
+            # ใช้ user.is_staff (ถ้าคุณใช้ StaffRequiredMixin) หรือ user.role == 'admin'
+            if user.is_superuser or user.is_staff or user.role == 'admin':
                 return TestDriveRequest.objects.all().order_by('-requested_at')
             
-            elif hasattr(user, 'is_dealer') and user.is_dealer():
-                user_dealer_code = user.get_dealer_code() 
-                
-                if user_dealer_code:
+            # 2. Dealer เห็นเฉพาะของตัวเอง
+            elif user.role == 'dealer':
+                # ตรวจสอบว่าผู้ใช้ Dealer ถูกผูกกับสาขาแล้วหรือไม่
+                if user.dealer:
+                    # ดึง dealer_code จาก Dealer Model ที่เชื่อมโยง
+                    user_dealer_code = user.dealer.dealer_code
+                    
+                    # 🚨 การกรอง: ต้องมั่นใจว่า preferred_dealer ใน TestDriveRequest เก็บ Dealer Code
                     return TestDriveRequest.objects.filter(
                         preferred_dealer=user_dealer_code
                     ).order_by('-requested_at')
+                
+                # ถ้าเป็น Dealer แต่ยังไม่ผูกกับสาขาใดๆ ก็ไม่เห็นอะไร
                 return TestDriveRequest.objects.none()
+        
+        # ผู้ใช้ที่ไม่ได้เข้าสู่ระบบจะไม่เห็นอะไร (แต่ LoginRequiredMixin จัดการแล้ว)
         return TestDriveRequest.objects.none()
 
 class TestDriveUpdateView(LoginRequiredMixin, UpdateView):
@@ -117,11 +129,10 @@ class TestDriveUpdateView(LoginRequiredMixin, UpdateView):
         testdrive.save()
         return super().form_valid(form)
     
-# Mixin สำหรับจำกัดให้เฉพาะ Staff/Admin เข้าถึงได้
 class StaffRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
     def test_func(self):
-        # อนุญาตเฉพาะผู้ใช้ที่เป็น Staff หรือ Superuser
-        return self.request.user.is_staff or self.request.user.is_superuser
+        # return self.request.user.is_staff or self.request.user.is_superuser
+        return self.request.user.is_superuser
 
 class DealerCreateView(StaffRequiredMixin, CreateView):
     model = Dealer
@@ -139,3 +150,35 @@ class DealerDeleteView(StaffRequiredMixin, DeleteView):
     model = Dealer
     template_name = 'dealer_confirm_delete.html'
     success_url = reverse_lazy('dealer_list')
+
+class DealerUserCreateView(StaffRequiredMixin, CreateView):
+    form_class = CustomUserCreationForm 
+    template_name = 'dealer_user_create.html'
+    success_url = reverse_lazy('user_list')
+    
+    def form_valid(self, form):
+        user = form.save(commit=False)
+        
+        user.role = 'dealer' 
+        
+        user.save()
+        return super().form_valid(form)
+    
+class UserListView(StaffRequiredMixin, ListView):
+    model = CustomUser
+    context_object_name = 'users'
+    template_name = 'user_list.html'
+    
+    def get_queryset(self):
+        return CustomUser.objects.exclude(is_superuser=True).order_by('role', 'username')
+
+class UserDeleteView(StaffRequiredMixin, DeleteView):
+    model = CustomUser
+    template_name = 'user_confirm_delete.html'
+    success_url = reverse_lazy('user_list')
+    
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        if obj == self.request.user:
+            raise PermissionDenied("You cannot delete your own account.")
+        return obj

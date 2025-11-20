@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}User Management{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="fw-bolder"><i class="bi bi-people-fill me-2 text-primary"></i> USER MANAGEMENT</h1>
+        
+        <a href="{% url 'dealer_user_create' %}" class="btn btn-primary shadow-sm fw-bold">
+            <i class="bi bi-plus-circle-fill me-1"></i> Add New User
+        </a>
+    </div>
+
+    <div class="card shadow-lg border-0">
+        <div class="card-body p-4">
+            
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+            {% if users %}
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width: 5%;">ID</th>
+                                <th style="width: 20%;"><i class="bi bi-person"></i> Username</th>
+                                <th style="width: 25%;"><i class="bi bi-envelope"></i> Email</th>
+                                <th style="width: 15%;"><i class="bi bi-person-badge"></i> Role</th>
+                                <th style="width: 15%;"><i class="bi bi-geo-alt"></i> Linked Dealer</th>
+                                <th style="width: 10%;">Status</th>
+                                <th style="width: 10%;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                            <tr>
+                                <td class="text-muted">{{ user.id }}</td>
+                                <td><strong>{{ user.username }}</strong></td>
+                                <td>{{ user.email }}</td>
+                                <td>
+                                    <span class="badge rounded-pill py-2 px-3 
+                                        {% if user.role == 'admin' %}bg-secondary{% elif user.role == 'dealer' %}bg-info text-dark{% else %}bg-light text-dark{% endif %}">
+                                        {{ user.role|upper }}
+                                    </span>
+                                </td>
+                                <td>
+                                    {% if user.dealer %}
+                                        {{ user.dealer.dealer_code }} - {{ user.dealer.name|truncatechars:20 }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if user.is_active %}
+                                        <span class="badge bg-success">Active</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">Inactive</span>
+                                    {% endif %}
+                                </td>
+                                <td class="text-center">
+                                    <a href="{% url 'user_delete' pk=user.pk %}" class="btn btn-sm btn-outline-danger" title="Delete User">
+                                        <i class="bi bi-trash"></i> Delete
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="alert alert-info text-center">No users found.</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

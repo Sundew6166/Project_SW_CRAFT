@@ -20,15 +20,18 @@
 
 <section class="py-5 bg-light">
     <div class="container">
-        <div class="d-flex justify-content-between align-items-center mb-5">
-            <h2 class="fw-bold text-mmth-red mb-0">Find a branch near you</h2>
-            
+        <div class="row justify-content-center mb-3">
+            <div class="col-12 text-center">
+                <h2 class="fw-bold text-mmth-red mb-0">Find a branch near you</h2>
+            </div>
+        </div>
+        
+        <div class="d-flex justify-content-end mb-4">
             {% if user.is_authenticated and user.is_superuser or user.is_staff %}
                 <a href="{% url 'dealer_create' %}" class="btn btn-success shadow-sm fw-bold">
                     <i class="bi bi-plus-circle-fill me-1"></i> Add New Dealer
                 </a>
             {% endif %}
-            
         </div>
         
         <div class="row justify-content-center mb-4">
@@ -99,13 +102,12 @@
             const filter = searchInput.value.toUpperCase();
             
             dealerCards.forEach(cardContainer => {
-                // ดึงข้อความจากการ์ดทั้งหมด (ชื่อและที่อยู่)
                 const cardText = cardContainer.textContent || cardContainer.innerText;
                 
                 if (cardText.toUpperCase().indexOf(filter) > -1) {
-                    cardContainer.style.display = ""; // แสดงการ์ด
+                    cardContainer.style.display = ""; 
                 } else {
-                    cardContainer.style.display = "none"; // ซ่อนการ์ด
+                    cardContainer.style.display = "none"; 
                 }
             });
         });

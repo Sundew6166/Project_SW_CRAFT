@@ -37,7 +37,7 @@ class Dealer(models.Model):
         verbose_name_plural = "Dealer"
 
     def __str__(self):
-        return f"{self.name} ({self.dealer_code})"
+        return f"{self.name}"
 
 # -------------------------------------------------------------
 # 3. TestDriveRequest Model

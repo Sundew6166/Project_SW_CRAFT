@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Confirm User Deletion{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0"><i class="bi bi-exclamation-triangle-fill me-2"></i> Confirm User Deletion</h4>
+                </div>
+                <div class="card-body">
+                    <p class="lead">
+                        Are you sure you want to delete the user? **"{{ customuser.username }}"** (Role: {{ customuser.role|upper }})?
+                    </p>
+                    <div class="alert alert-warning small" role="alert">
+                        <i class="bi bi-info-circle-fill me-1"></i> This action cannot be undone. The user will be removed from the system.
+                    </div>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="{% url 'user_list' %}" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-lg me-1"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-trash-fill me-1"></i> Yes, Delete User
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

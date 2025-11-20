@@ -48,11 +48,11 @@
                     {% endif %}
 
                     {% if user.is_authenticated and user.is_superuser %}
-                        {% comment %} <li class="nav-item">
-                            <a class="nav-link" href="{% url 'dealer_user_create' %}">
-                                ADD DEALER USER
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'user_list' %}">
+                                MANAGE USER
                             </a>
-                        </li> {% endcomment %}
+                        </li>
                     {% endif %}
                 </ul>
 

@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Dealer User{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h1 class="fw-bolder mb-4">
+                <i class="bi bi-person-plus-fill me-2 text-primary"></i> Add dealer users
+            </h1>
+            <div class="card shadow-lg p-4">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <p class="text-muted mb-4">The created user will automatically receive the **Role: Dealer**.</p>
+
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.help_text %}
+                                <div class="form-text">{{ field.help_text }}</div>
+                            {% endif %}
+                            {% for error in field.errors %}
+                                <div class="text-danger small">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+
+                    <div class="d-flex justify-content-end mt-4">
+                        <a href="{% url 'home' %}" class="btn btn-secondary me-2">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Create a user</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
