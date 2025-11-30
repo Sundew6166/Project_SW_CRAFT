@@ -4,7 +4,43 @@
 {% block content %}
 <div class="container py-5">
     <h1 class="fw-bold mb-4">Edit Request #{{ object.pk }}</h1>
-    <p>Customer: <strong>{{ object.full_name }}</strong> | Car: <strong>{{ object.get_car_model_display }}</strong></p>
+    
+    {# ✅ แสดงข้อมูลสรุปของลูกค้าและนัดหมาย #}
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5 class="card-title text-primary fw-bold">{{ object.full_name }}</h5>
+            <p class="card-text mb-1">
+                <i class="bi bi-car-front-fill me-2"></i> Car Model: <strong>{{ object.get_car_model_display }}</strong>
+            </p>
+            <p class="card-text mb-1">
+                <i class="bi bi-calendar-check me-2"></i> Requested Date: <strong>{{ object.preferred_date|date:"D, j F Y" }}</strong>
+            </p>
+            <p class="card-text mb-1">
+                <i class="bi bi-geo-alt me-2"></i> Dealer: <strong>{{ object.preferred_dealer }}</strong>
+            </p>
+            {# แสดง Email (ถ้ามี) #}
+            {% if object.email %}
+            <p class="card-text mb-0">
+                <i class="bi bi-envelope me-2"></i> Email: 
+                <a href="mailto:{{ object.email }}">{{ object.email }}</a>
+            </p>
+            {% endif %}
+        </div>
+    </div>
+    
+    <h3 class="fw-bold fs-5 mt-4 mb-3">Update Request Details</h3>
+    
+    {# 💡 แสดงสถานะการยืนยันครั้งล่าสุด (ถ้ามี) #}
+    {% if object.confirmation_datetime %}
+        <div class="alert alert-success d-flex align-items-center mb-4">
+            <i class="bi bi-check-circle-fill me-2 fs-4"></i>
+            <div>
+                Confirmed: <strong>{{ object.confirmation_datetime|date:"Y-m-d" }}</strong> 
+                by staff: <strong>{{ object.confirmation_staff.username|default:"System" }}</strong>.
+            </div>
+        </div>
+    {% endif %}
+
     <hr>
     
     <form method="post">
@@ -13,6 +49,14 @@
         {% for field in form %}
             <div class="mb-3">
                 <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                
+                {# 💡 เพิ่มคำแนะนำชัดเจนสำหรับ Confirmation DateTime #}
+                {% if field.name == 'confirmation_datetime' %}
+                    <div class="alert alert-info small p-2 mb-2">
+                        <i class="bi bi-clock-fill me-1"></i> กรุณาเลือกวันที่ยืนยันการนัดหมายด้วยตนเอง
+                    </div>
+                {% endif %}
+                
                 {{ field }}
                 {% if field.help_text %}
                     <small class="form-text text-muted">{{ field.help_text }}</small>

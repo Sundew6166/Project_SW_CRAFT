@@ -1,5 +1,7 @@
 from django import forms
 from .models import TestDriveRequest, Dealer
+from django.utils import timezone
+from datetime import time, datetime
 
 CAR_MODEL_CHOICES = [
     ('', '--- Select Car Model ---'), 
@@ -43,14 +45,44 @@ class TestDriveForm(forms.ModelForm):
         }
 
 class TestDriveUpdateForm(forms.ModelForm):
+    # ฟิลด์สำหรับรับค่าเฉพาะวัน (Date) ที่ผู้ใช้เลือก
+    confirmation_datetime = forms.DateField(
+        widget=forms.DateInput(
+            attrs={'type': 'date', 'class': 'form-control'},
+            format='%Y-%m-%d' 
+        ),
+        required=False, 
+        label='Confirmed Date'
+    )
+    
     class Meta:
         model = TestDriveRequest
         fields = [
             'status', 
-            # 'confirmation_staff', 
-            # 'confirmation_datetime', 
+            'confirmation_datetime', 
             'staff_notes'
         ]
+
+    # ✅ เพิ่มเมธอด clean เพื่อรวมวันกับเวลา 01:00 AM
+    def clean_confirmation_datetime(self):
+        # รับค่าวันที่ที่ผู้ใช้ป้อนเข้ามา (เป็น date object)
+        confirmed_date = self.cleaned_data.get('confirmation_datetime')
+        
+        if confirmed_date:
+            # 1. กำหนดเวลาที่ต้องการเป็น 07:00:00 AM
+            default_time = time(hour=7, minute=0, second=0)
+            
+            # 2. รวม Date object กับ Time object เป็น Naive Datetime
+            naive_datetime = datetime.combine(confirmed_date, default_time)
+            
+            # 3. แปลงเป็น Timezone Aware Object (สำคัญมากสำหรับ Django)
+            #    โดยถือว่า 07:00 AM นี้อยู่ใน TIME_ZONE ที่กำหนดใน settings.py (เช่น Asia/Bangkok)
+            #    สิ่งนี้ช่วยแก้ปัญหา "วันแสดงไม่ตรงกัน"
+            aware_datetime = timezone.make_aware(naive_datetime)
+            
+            return aware_datetime
+            
+        return confirmed_date # ถ้าผู้ใช้ไม่เลือกวัน ให้ส่งค่า None กลับไป  
 
 class DealerForm(forms.ModelForm):
     class Meta:

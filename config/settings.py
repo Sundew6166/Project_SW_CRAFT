@@ -133,5 +133,6 @@ LOGOUT_REDIRECT_URL = '/'
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
-TIME_ZONE = 'Asia/Bangkok'
 USE_TZ = True
+TIME_ZONE = 'Asia/Bangkok'
+USE_L10N = True

@@ -120,12 +120,13 @@ class TestDriveUpdateView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('testdrive_list')
 
     def form_valid(self, form):
+        # 1. ให้ Django ดึงข้อมูลจากฟอร์มมาเตรียมไว้
         testdrive = form.save(commit=False)
 
+        # 2. บันทึกว่าใครเป็นคนอัปเดต (ตั้งค่าอัตโนมัติ)
         testdrive.confirmation_staff = self.request.user
 
-        testdrive.confirmation_datetime = timezone.now()
-
+        # 4. บันทึกข้อมูลทั้งหมดลงฐานข้อมูล (รวมถึง confirmation_datetime ที่ผู้ใช้เลือก)
         testdrive.save()
         return super().form_valid(form)
     
